@@ -1,0 +1,8 @@
+{
+    "appId": "com.a-huang.nextrello",
+    "icon": "./tempIcon.png",
+    "files": ["dist-electron", "dist-react"],
+    "win": {
+        "target": ["portable", "msi"]
+    } 
+}
