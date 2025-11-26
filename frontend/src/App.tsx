@@ -1,3 +1,4 @@
+// frontend/src/App.tsx
 import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -96,6 +97,19 @@ export default function App() {
     const zoomFactor = -e.deltaY * 0.001;
     const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scaleRef.current * (1 + zoomFactor)));
     setScale(newScale);
+
+    // Recalculate grid based on the new scale and viewport size
+    const scaledTileSize = TILE_SIZE * newScale;
+    const tilesX = Math.ceil(viewport.w / scaledTileSize) + BUFFER_TILES * 2;
+    const tilesY = Math.ceil(viewport.h / scaledTileSize) + BUFFER_TILES * 2;
+
+    const offsetX = grid.x - viewport.w / 2;
+    const offsetY = grid.y - viewport.h / 2;
+
+    const startGridX = Math.floor(-offsetX / scaledTileSize) - BUFFER_TILES;
+    const startGridY = Math.floor(-offsetY / scaledTileSize) - BUFFER_TILES;
+
+    setGrid({ x: grid.x, y: grid.y }); // Update grid based on new scale and viewport size
   };
 
   // Calculate visible grid bounds
