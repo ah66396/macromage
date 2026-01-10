@@ -1,13 +1,11 @@
 import './App.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState} from 'react';
 import Overlay from './Components/Overlay';
+import {usePageScaleContext } from './Context/PageScaleContext';
 
-const TILE_SIZE = 200;
-const BUFFER_TILES = 2;
-const MIN_SCALE = 0.2;
-const MAX_SCALE = 4;
 
 export default function App() {
+  const {pageScaleContext, dispatchPageScaleContext} = usePageScaleContext();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [grid, setGrid] = useState({ x: 0, y: 0 });
@@ -88,13 +86,13 @@ export default function App() {
   const onTouchEnd = () => handleMouseUp();
 
   const calculateGridBounds = (grid: { x: number; y: number }, scale: number, viewport: { w: number; h: number }) => {
-    const scaledTileSize = TILE_SIZE * scale;
-    const tilesX = Math.ceil(viewport.w / scaledTileSize) + BUFFER_TILES * 2;
-    const tilesY = Math.ceil(viewport.h / scaledTileSize) + BUFFER_TILES * 2;
+    const scaledTileSize = pageScaleContext.TILE_SIZE * scale;
+    const tilesX = Math.ceil(viewport.w / scaledTileSize) + pageScaleContext.BUFFER_TILES * 2;
+    const tilesY = Math.ceil(viewport.h / scaledTileSize) + pageScaleContext.BUFFER_TILES * 2;
     const offsetX = grid.x - viewport.w / 2;
     const offsetY = grid.y - viewport.h / 2;
-    const startGridX = Math.floor(-offsetX / scaledTileSize) - BUFFER_TILES;
-    const startGridY = Math.floor(-offsetY / scaledTileSize) - BUFFER_TILES;
+    const startGridX = Math.floor(-offsetX / scaledTileSize) - pageScaleContext.BUFFER_TILES;
+    const startGridY = Math.floor(-offsetY / scaledTileSize) - pageScaleContext.BUFFER_TILES;
     return { tilesX, tilesY, startGridX, startGridY };
   };
 
@@ -102,7 +100,7 @@ export default function App() {
     if (!e.ctrlKey) return;
     e.preventDefault();
     const zoomFactor = -e.deltaY * 0.001;
-    const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scaleRef.current * (1 + zoomFactor)));
+    const newScale = Math.min(pageScaleContext.MAX_SCALE, Math.max(pageScaleContext.MIN_SCALE, scaleRef.current * (1 + zoomFactor)));
     setScale(newScale);
   };
 
@@ -117,8 +115,8 @@ export default function App() {
   for (let gy = 0; gy < tilesY; gy++) {
     for (let gx = 0; gx < tilesX; gx++) {
       dotCoords.push({
-        x: (startGridX + gx) * TILE_SIZE,
-        y: (startGridY + gy) * TILE_SIZE,
+        x: (startGridX + gx) * pageScaleContext.TILE_SIZE,
+        y: (startGridY + gy) * pageScaleContext.TILE_SIZE,
       });
     }
   }
