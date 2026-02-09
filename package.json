@@ -1,0 +1,19 @@
+{
+  "name": "macromage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ah66396/macromage.git"
+  },
+  "author": "Andy Huang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ah66396/macromage/issues"
+  },
+  "homepage": "https://github.com/ah66396/macromage#readme"
+}
